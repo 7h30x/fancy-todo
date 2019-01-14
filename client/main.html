@@ -20,12 +20,13 @@
 
   <!-- Custom styles for this template -->
   <link href="css/new-age.min.css" rel="stylesheet">
+  <link href="css/main.css" type="text/css" rel="stylesheet">
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">Start Bootstrap</a>
+        <a class="navbar-brand js-scroll-trigger" href="#page-top"><h2>To-Do</h2></a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           Menu
           <i class="fas fa-bars"></i>
@@ -33,11 +34,24 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#download">Download</a>
+              <a class="nav-link js-scroll-trigger" href="#" id="myTasksButton">My Tasks</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#features">Features</a>
+              <div class="dropdown">
+                <a href="#"class="dropdown-toggle" data-toggle="dropdown">
+                    My Groups
+                </a>
+                <div class="dropdown-menu" id="group-menu">
+                </div>
+              </div>
+            </li>  
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#" id="createTaskButton" data-toggle="modal" data-target="#createTaskModal">Add Task</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="#" data-toggle="modal" data-target="#createGroupModal">Add Group</a>
+            </li>
+            
             <li class="nav-item">
               <a class="nav-link js-scroll-trigger" href='#' onclick="signOut()">Sign Out</a>
             </li>
@@ -45,25 +59,96 @@
         </div>
       </div>
     </nav>
+    <!-- create task MODAL -->
+    <div class="modal  fade " id="createTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"> create Task</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="createTaskForm">
+              <label> name
+                <input id="taskNameField" type="text" required></input>
+              </label>
+              <label> due date
+                <input id="taskDateField" type="date" required></input>
+              </label>
+              <br>
+              <label> priority
+                <select name="priority" id="priority" required>
+                  <option value="high">high</option>
+                  <option value="medium">medium</option>
+                  <option value="low">low</option>
+                </select>
+              </label>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="saveTask">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade " id="createGroupModal" tabindex="-1" role="dialog" aria-labelledby="groupModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="groupModalLabel">new Group</h5>
+            <button type="button btn btn-dark" class="close" data-dismiss="modal" aria-label="Close">
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="createGroupForm">
+              <label> group name
+                <input type="text" id="groupNameField" required></input>
+              </label>
+              <br>
+              <label> select members to add to group:
+                <select id="groupMembersField" multiple size="10">
+                </select>
+              </label>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="saveGroup">Save Group</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <header class="masthead">
       <div class="container h-100">
         <div class="row h-100">
           <div class="col-lg-7 my-auto">
-            <div class="header-content mx-auto">
-              <br>
-             
+            <div class="test">
+              <table class=" table table-dark">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Due Date</th>
+                    <th>Edit</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
             </div>
           </div>
           <div class="col-lg-5 my-auto">
             <div class="device-container">
               <div class="device-mockup iphone6_plus portrait white">
                 <div class="device">
-                  <div class="screen">
-                    <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
+                  <div class="button btn btn-primary" data-toggle="modal" data-target="#createTaskModal" style="display:none" id="createGroupTaskButton">
+                    create Group Task
                   </div>
-                  <div class="button">
-                    <!-- You can hook the "home button" to some JavaScript events or just remove it -->
-                  </div>
+                  <br>
+                  <!-- <div class="button btn btn-primary" id="removeFinishedTaskButton">
+                    Remove Finished Tasks
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -76,8 +161,13 @@
     <script src="https://apis.google.com/js/platform.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
     <script src="vendor/jquery/jquery.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
     <!-- sign in / sign out-->
     <script>
+      let groupData;
       function checkSignIn () {
         if(!localStorage.token) window.location.replace('./index.html') 
       }
@@ -100,22 +190,219 @@
         })
         
       }
+      function saveTask (isGroupTask) {
+        let groupId;
+        let form = $('#createTaskForm');
+        isGroupTask ? groupId = $('#createGroupTaskButton').attr('groupId') : groupId = null ;
+        const data = {
+          name: form[0][0].value,
+          due: form[0][1].value,
+          priority: $('#priority option:selected').text(),
+          groupId: groupId !== null ? groupId : null  
+        }
+        axios({
+          method:'POST',
+          url: 'http://localhost:3000/tasks',
+          headers: {
+            authorization: localStorage.getItem('token')
+          },
+          data
+        })
+        .then( (data) => {
+          $('#createTaskModal').modal('hide');
+            return getGroups();
+        })
+        .then(() => {
+          console.log('resolved')
+          if(groupId !== null) {
+            renderGroupTasks(groupId);
+          } else {
+            getToDos();
+          }
+        })
+        .catch(err => console.log(err))
+      }
+      function editTask (taskId) {
+        let form = $('#createTaskForm');
+        const data = {
+          name: form[0][0].value,
+          due: form[0][1].value,
+          priority: $('#priority option:selected').text(),
+          taskId
+        }
+        axios({
+          method:'PUT',
+          url: 'http://localhost:3000/tasks',
+          headers: {
+            authorization: localStorage.getItem('token')
+          },
+          data
+        })
+        .then((data) => {
+          $('#createTaskModal').modal('hide');
+          getToDos();
+        })
+        .catch(err => console.log(err))   
+      }
+      function saveGroup () {
+        let form = $('#createGroupForm');
+        const data = {
+          name: $('#groupNameField').val(),
+          members: $('#groupMembersField').val(),
+        }
+        axios({
+          method:'POST',
+          url: 'http://localhost:3000/groups',
+          headers: {
+            authorization: localStorage.getItem('token')
+          },
+          data
+        })
+        .then((data) => {
+          $('#createGroupModal').modal('hide');
+          getGroups();
+        })
+        .catch(err => console.log(err))   
+      }
+     
+      function renderHTMLUsers (users) {
+        let html='';
+        console.log("users")
+        console.log(users)
+        users.forEach(user => {
+          html += `<option value=${user._id} id=${user._id}>${user.firstName} ${user.lastName} </option>`
+        })
+        $('#groupMembersField').append(html);
+      }
+      function renderGroupTasks (groupId) {
+        let selected= groupData.filter(g=> (g['_id']==groupId))[0];
+        $('#createGroupTaskButton').attr('groupId', groupId);
+        $('#createGroupTaskButton').show();  
+        console.log('groupid')
+        console.log(selected.tasks)
+        renderHTMLTasks(selected.tasks);
+      }
+      function renderHTMLTasks (tasks) {
+        console.log("tasks")
+        console.log(tasks)
+        let html='';
+        if(tasks.length > 0) {
+          tasks.forEach(task => {
+            html += `<tr id=${task._id}>`
+            html +=`<td>${task.name}</td>`
+            html +=`<td>${task.due.toString().slice(0,10)}</td>`
+            html += `<td><a href="#" data-toggle="modal" data-target="#createTaskModal" name=${task.name} due=${task.due} priority=${task.priority}>edit</a></td>`
+            html += '<td><a href="#">done!</a></td>'
+            html +="</tr>"
+          })
+        } else {
+          html += '<tr> <td rowspan="4"> no tasks. </td></tr>'
+        }
+        console.log('--------------OK')
+        $('tbody').children().remove();
+        $('tbody').append(html);
+        triggerCreateModal();
+      }
+      function triggerCreateModal() {
+        $('#createTaskModal').on('show.bs.modal', function (event) {
+          var target = $(event.relatedTarget) //selects task triggering the modal
+          console.log(target)
+          var attr=target[0].attributes;
+          var modal = $(this);
+          if(target[0].id == 'createTaskButton') {
+            modal.find('.modal-title').text(`Create New Task`);
+            modal.find('#taskNameField').val('');
+            modal.find('#taskDateField').val(due);
+            modal.find(`#priority [value="low"]`).attr('selected', 'selected');
+          } else if (target[0].id == 'createGroupTaskButton') {
+            modal.find('.modal-title').text(`Create New Group Task`);
+            modal.find('#taskNameField').val('');
+            modal.find('#taskDateField').val(due);
+            modal.find(`#priority [value="low"]`).attr('selected', 'selected');
+          } else {
+            var taskName = attr['name'].value;
+            var due= attr['due'].value;
+            var priority = attr['priority'].value;
+            modal.find('.modal-title').text(`Edit Task Id # ${target.parents('tr').attr('id')}`);
+            modal.find('#taskNameField').val(taskName);
+            modal.find('#taskDateField').val(due);
+            modal.find(`#priority [value="${priority}"]`).attr('selected', 'selected');
+          }
+
+        })
+      }
+      function renderHTMLGroups(groups) {
+        let html='';
+        groups.forEach(group => {
+          html += `<a class="dropdown-item" onclick="renderGroupTasks('${group._id}')" href="#" id="${group._id}">${group.name}</a>`
+        })
+        $('#group-menu').children().remove();
+        $('#group-menu').append(html);
+      }
+      function getUsers () {
+        axios({
+          method:'GET',
+          url: 'http://localhost:3000/users',
+        })
+        .then(({data:{data}}) => {
+          renderHTMLUsers(data);
+        })
+        .catch(error => console.log(error))
+      }
+      function getToDos () {
+        axios({
+          method:'GET',
+          url: 'http://localhost:3000/tasks',
+          headers: {
+            authorization: localStorage.getItem('token')
+          }
+        })
+        .then(({data:{data}}) => {
+          renderHTMLTasks(data);
+        })
+        .catch(error => console.log(error))
+      }
+      function getGroups () {
+        console.log('getting group!')
+        return axios({
+          method:'GET',
+          url:'http://localhost:3000/groups',
+          headers:{
+            authorization: localStorage.getItem('token'),
+          }
+        })
+        .then(({data:{data}}) => {
+          console.log('here!')
+          groupData = data;
+          renderHTMLGroups(groupData);
+          return true
+        })
+        .catch(error => console.log(error))
+      }
       function loadCurrentUser () {
-        function getToDos () {
-          axios({
-            method:'GET',
-            url: 'http://localhost:3000/users'
-          })
-        }
-        function getGroups () {
-          axios({
-            method:'GET',
-            url:'http://localhost:3000/groups'
-          })
-        }
+        getUsers();
+        getToDos();
+        getGroups();
       }
       window.onload= ()=> {
         checkSignIn();
+        loadCurrentUser();
+        $('#myTasksButton').on('click', () => {
+          $('#createGroupTaskButton').hide();  
+          getToDos()
+        });
+        $('#saveGroup').on('click', () => saveGroup());
+        $('#saveTask').on('click', () => {
+          let type= $('#createTaskModal .modal-title').text(); 
+          if( type== 'Create New Task') {
+            saveTask(false);
+          } else if (type='Create New Group Task') {
+            saveTask(true);
+          } else {
+            let taskId = type.slice(15);
+            editTask(taskId);
+          }
+        })
       }
     </script>
   </body>

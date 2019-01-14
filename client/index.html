@@ -105,6 +105,7 @@
           }
         })
         .then(result => {
+          console.log('xx')
           localStorage.setItem('token', result.data.token);
           window.location='./main.html'
         })
@@ -118,8 +119,8 @@
               data,
               url: "http://localhost:3000/users/signin"
             })
-            .then(result => {
-              localStorage.setItem('token', result.token);
+            .then(({data}) => {
+              localStorage.setItem('token', data.token);
               window.location='./main.html'
             })
             .catch(error => console.log(error))

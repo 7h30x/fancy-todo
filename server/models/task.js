@@ -30,8 +30,7 @@ const taskSchema = new mongoose.Schema({
 }, {timestamps: true})
   //add task to group if any
 taskSchema.post('save', (doc, next)=> {
-  console.log('x')
-  if(doc.groupId) {
+  if(doc.groupId !== null) {
     let taskId = doc._id;
     Group.findByIdAndUpdate(doc.groupId, {
       $addToSet:{
@@ -46,7 +45,7 @@ taskSchema.post('save', (doc, next)=> {
       console.log(error)
       next(error);
     })
-  }
+  } else next();
 })
 
 taskSchema.post('findOneAndDelete', (doc,next) => {

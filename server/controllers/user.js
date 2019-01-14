@@ -3,6 +3,20 @@ const Model = require('../models/user');
 const jwt = require('jsonwebtoken');
 
 module.exports = class User {
+  static findAll (req,res) {
+    Model.find()
+    .then(data => {
+      res.status(200).json({
+        message:'successfully retrieved users',
+        data
+      })
+    })
+    .catch(error => {
+      res.status(400).json({
+        message: error
+      })
+    })
+  }
   static signUp (req,res) {
       let newUser ={
         email: req.body.email,
@@ -27,7 +41,7 @@ module.exports = class User {
         })
       })
       .catch(error => {
-        console.log(error)
+        // console.log(error)
         res.status(400).json({
           message: error
         })
@@ -35,16 +49,38 @@ module.exports = class User {
   }
   static googleSignIn (req,res) {
     //after verifying gtoken check upsert user into DB
-
+    const payload = req.body.payload;
+    User.findOneAndUpdate({
+      email: payload.email
+    }, {
+      email: payload.email,
+      name: payload.name
+    }, {
+      upsert: true,
+      new: true
+    })
+    .then(() => {
+      const token = jwt.sign(payload, process.env.JWTSECRET); 
+        res.status(200).json({
+          message: 'successfully signed in with google.',
+          token,
+          picture: payload.picture,
+          name: payload.given_name
+        })
+    })
+    .catch(error => {
+      res.status(400).json({
+        error
+      })
+    })
   }
+  
   static signIn (req,res) {
     let userData;
     let loginData ={
       email: req.body.email,
       password: req.body.password
     } 
-    console.log(loginData)
-
     Model.findOne({email: loginData.email})
     .then(user => {
       if(user) {

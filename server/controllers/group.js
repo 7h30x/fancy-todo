@@ -24,9 +24,12 @@ module.exports= class group {
     })
   }
   static read (req,res) {
+    let userId = req.token._id
     Model.find({
-      members: req.body.userId
+      members: userId
     })
+    .populate('members')
+    .populate('tasks')
     .then(data => {
       if(data) {
         res.status(200).json({

@@ -5,6 +5,7 @@ const verifyToken = require('../middlewares/verifyToken');
 const verifyJWT = require('../middlewares/verifyJWT');
 
 /* GET users listing. */
+router.get('/', userController.findAll)
 router.post('/signin', userController.signIn)
 router.post('/signup', userController.signUp)
 router.post('/gsignin', verifyToken, userController.gSignIn)

@@ -18,7 +18,6 @@ module.exports = function (req,res, next) {
   let token = req.body.accessToken
   verify(token)
   .then(payload => {
-    console.log(payload)
     req.body.payload = payload;
     next();
   })
